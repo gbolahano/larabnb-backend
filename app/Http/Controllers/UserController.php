@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\User;
+use App\Reservation;
 
 class UserController extends Controller
 {
@@ -11,9 +13,19 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        return view('users.home');
+        $user = User::find($id);
+        $reservations = $user->reservations()->orderBy('created_at', 'desc')->take(5)->get();
+
+        $bookings = Reservation::where('owner_id', $id)->orderBy('created_at', 'desc')->take(5)->get();
+
+        $data = [
+            "reservations" => $reservations,
+            "bookings" => $bookings
+        ];
+
+        return response()->json($data);
     }
 
     /**

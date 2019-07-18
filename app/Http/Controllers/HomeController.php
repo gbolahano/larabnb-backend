@@ -16,7 +16,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+
     }
 
     /**
@@ -24,33 +24,41 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index($id)
     {
-        $user = User::find(Auth::id());
+        $user = User::find($id);
         $reservations = $user->reservations()->orderBy('created_at', 'desc')->take(5)->get();
 
-        $bookings = Reservation::where('owner_id', Auth::id())->orderBy('created_at', 'desc')->take(5)->get();
-        return view('home')->with('reservations', $reservations)
-                        ->with('bookings', $bookings);
+        $bookings = Reservation::where('owner_id', $id)->orderBy('created_at', 'desc')->take(5)->get();
+
+        $data = [
+            "reservations" => $reservations,
+            "bookings" => $bookings
+        ];
+
+        return response()->json($data);
     }
 
     public function profile()
     {
-        return view('users.profile.index');
+        // return view('users.profile.index');
     }
 
     public function edit()
     {
-        return view('users.profile.edit');
+        // return view('users.profile.edit');
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
-        $user = User::find(Auth::id());
+        $user = User::find($id);
         $user->name = $request->name;
         $user->save();
 
-        session()->flash('success', 'Profile Updated');
-        return redirect()->back();
+        $data = [
+            "success" => "Profile updated"
+        ];
+
+        return response()->json($data);
     }
 }

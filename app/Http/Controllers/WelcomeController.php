@@ -12,20 +12,23 @@ class WelcomeController extends Controller
     public function index()
     {
     	$listings = Listing::orderBy('created_at', 'desc')->take(4)->get();
-    	return view('welcome')->with('listings', $listings);
+			// return view('welcome')->with('listings', $listings);
+			return response()->json($listings);
     }
 
     public function show($id)
     {
     	$listing = Listing::find($id);
 
-    	return view('frontend.single-listing')->with('listing', $listing);
+			// return view('frontend.single-listing')->with('listing', $listing);
+			return response()->json($listing);
     }
 
     public function allListings()
     {
     	$listings = Listing::orderBy('created_at', 'desc')->get();
-    	return view('frontend.home-listings-all')->with('listings', $listings);
+			// return view('frontend.home-listings-all')->with('listings', $listings);
+			return response()->json($listings);
     }
 
     public function makeReservation(Request $request, $id)

@@ -48,7 +48,8 @@ class ReservationController extends Controller
     public function show($id)
     {
         $reservation = Reservation::where('id', $id)->first();
-        return view('users.reservations.index')->with('reservation', $reservation);
+        $reserved = $reservation->listing;
+        return response()->json($reserved);
     }
 
     /**
@@ -80,27 +81,37 @@ class ReservationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id, $user_id)
     {
-        $reservation = Reservation::find($id)->where('user_id', Auth::id())->first();
+        $reservation = Reservation::find($id)->where('user_id', $user_id)->first();
         $reservation->delete();
 
-        session()->flash('success', 'Reservation Cancelled');
-        return redirect()->back();
+        $data = [
+            "success" => "Reservation deleted"
+        ];
+
+        return response()->json($data);
     }
-    public function decline($id)
+    public function decline($id, $owner_id)
     {
-        $reservation = Reservation::find($id)->where('owner_id', Auth::id())->first();
+        $reservation = Reservation::find($id)->where('owner_id', $owner_id)->first();
         $reservation->delete();
 
-        session()->flash('success', 'Reservation Declined');
-        return redirect()->back();
+        $data = [
+            "success" => "Reservation declined"
+        ];
+
+        return response()->json($data);
     }
-    public function accept($id)
+    public function accept($id, $owner_id)
     {
-        // $reservation = Reservation::find($id)->where('owner_id', Auth::id())->first();
-        // $reservation->status = '1';
-        
-        return redirect()->back();
+        $reservation = Reservation::find($id)->where('owner_id', $owner_id)->first();
+        $reservation->status = '1';
+        $reservation->save();
+
+        $data = [
+            "success" => "Reservation accepted"
+        ];
+        return response()->json($data);
     }
 }

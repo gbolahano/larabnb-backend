@@ -1,7 +1,7 @@
 <?php
 
 
-Route::get('/', 'WelcomeController@index');
+/* Route::get('/', 'WelcomeController@index');
 Route::resource('amenities', 'AmenityController');
 Route::post('reviews/{listing_id}/store', 'ReviewsController@store')->name('review.store');
 Route::get('home-listing/{id}/show', 'WelcomeController@show')->name('single.listing.show');
@@ -27,4 +27,4 @@ Route::group(['middleware' => 'auth', 'prefix' => 'user'], function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index')->name('home'); */
