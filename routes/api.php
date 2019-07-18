@@ -17,13 +17,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('listings', 'WelcomeController@index');
-Route::get('listing/{id}/show', 'WelcomeController@show')->name('single.listing.show');
-Route::post('listing/{id}/make-reservation', 'WelcomeController@makeReservation')->name('home-listings.book');
-// Route::get('listings/all', 'WelcomeController@allListings')->name('home-listings.all');
+Route::get('/listings', 'WelcomeController@index');
 Route::resource('amenities', 'AmenityController');
 Route::post('reviews/{listing_id}/store', 'ReviewsController@store')->name('review.store');
-
+Route::get('home-listing/{id}/show', 'WelcomeController@show')->name('single.listing.show');
+Route::get('home-listings/all', 'WelcomeController@allListings')->name('home-listings.all');
+Route::post('home-listing/{id}/make-reservation', 'WelcomeController@makeReservation')->name('home-listings.book');
 Route::group(['middleware' => 'auth:api', 'prefix' => 'user'], function () {
     // Route::get('/home', 'UserController@index')->name('user.home');
     Route::get('{id}/home', 'UserController@index')->name('home');
