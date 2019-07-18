@@ -42,6 +42,6 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'user'], function () {
 
    	// Route::get('profile', 'HomeController@profile')->name('profile');
     // Route::get('profile/edit', 'HomeController@edit')->name('users.profile.edit');
-    Route::post('profile/{id}/update', 'HomeController@update')->name('users.profile.update');
+    Route::post('profile/{id}/update', 'UserController@update')->name('users.profile.update');
 });
 
