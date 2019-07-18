@@ -36,7 +36,31 @@ class ReservationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'user_id' => 'required',
+            'listing_id' => 'required',
+            'date_from' => 'required',
+            'date_to' => 'required',
+            'no_of_guests' => 'required',
+            'price' => 'required',
+            'owner_id' => 'required',
+        ]);
+
+        Reservation::create([
+            'user_id' => $request->user_id,
+            'listing_id' => $request->listing_id,
+            'date_from' => $request->date_from,
+            'date_to' => $request->date_to,
+            'no_of_guests' => $request->no_of_guests,
+            'price' => $request->price,
+            'owner_id' => $request->owner_id,
+        ]);
+
+        $data = [
+            "success" => "Reservation created"
+        ];
+        
+        return response()->json($data);
     }
 
     /**
