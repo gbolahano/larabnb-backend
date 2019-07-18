@@ -18,7 +18,12 @@ class WelcomeController extends Controller
 
     public function show($id)
     {
-    	$listing = Listing::find($id);
+			$listing = Listing::where('id', $id)->first();
+			$listing->amenities;
+			// $data = [
+			// 	'listing' => $listing,
+			// 	'amenities' => $amenities
+			// ];
 
 			// return view('frontend.single-listing')->with('listing', $listing);
 			return response()->json($listing);
@@ -51,7 +56,11 @@ class WelcomeController extends Controller
     		'owner_id' => $listing->user_id
     	]);
 
-    	session()->flash('success', 'Booked successfully');
-    	return redirect()->back();
+    	// session()->flash('success', 'Booked successfully');
+			// return redirect()->back();
+			$data = [
+				"success" => "Booked successfully"
+			];
+			return response()->json($data);
     }
 }
