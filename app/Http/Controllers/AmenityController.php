@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Amenity;
 class AmenityController extends Controller
 {
     /**
@@ -13,7 +13,11 @@ class AmenityController extends Controller
      */
     public function index()
     {
-        //
+        $amenities = Amenity::all();
+        $data = [
+            "amenities" => $amenities
+        ];
+        return response()->json($data);
     }
 
     /**
@@ -34,7 +38,18 @@ class AmenityController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required'
+        ]);
+
+        Amenity::create([
+            'name' => $request->names
+        ]);
+
+        $data = [
+            "success" => "Amenity created"
+        ];
+        return response()->json($data);
     }
 
     /**
@@ -68,7 +83,19 @@ class AmenityController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required'
+        ]);
+
+        $amenity = Amenity::find($id)->first();
+        $amenity->name = $request->name;
+        $amenity->save();
+
+        $data = [
+            "success" => "Amenity updated"
+        ];
+
+        return response()->json($data);
     }
 
     /**
@@ -79,6 +106,13 @@ class AmenityController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $amenity = Amenity::find($id)->first();
+        $amenity->delete();
+
+        $data = [
+            "success" => "Amenity deleted"
+        ];
+
+        return response()->json($data);
     }
 }
