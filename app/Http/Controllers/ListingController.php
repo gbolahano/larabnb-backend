@@ -7,6 +7,7 @@ use App\Listing;
 use App\Amenity;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ListingController extends Controller
 {
@@ -17,9 +18,18 @@ class ListingController extends Controller
      */
     public function index($user_id)
     {
-        $user = User::find($user_id);
-        $listings = $user->listings()->orderBy('created_at', 'desc')->get();
-        return view('users.listings.index')->with('listings', $listings);
+        // $user = User::find($user_id);
+        $data = DB::table('users')
+            ->where('users.id', $user_id)
+            ->join('listings', 'users.id', '=', 'listings.user_id')
+            ->orderBy('listings.created_at', 'desc')
+            ->get();
+        return response()->json([
+            "listings" => $data
+        ]);
+
+        // $listings = $user->listings()->orderBy('created_at', 'desc')->get();
+        // return view('users.listings.index')->with('listings', $listings);
     }
 
     /**
