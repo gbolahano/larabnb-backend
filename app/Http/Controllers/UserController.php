@@ -19,16 +19,10 @@ class UserController extends Controller
     {
         $user = User::find($id);
 
-        // get user listings
-        /* $data = DB::table('users')
-            ->where('users.id', $id)
-            ->join('listings', 'users.id', '=', 'listings.user_id')
-            ->get(); */
-
         // $reservations = $user->reservations()->orderBy('created_at', 'desc')->take(5)->get();
 
         $reservations = DB::table('reservations')
-            ->where('reservations.user_id', $id)
+            ->where('reservations.user_id', $user->id)
             ->select('users.name as user_name', 'photos', 'date_to', 'date_from', 'listings.name as listing_name', 'description', 'reservations.price as price', 'no_of_guests', 'status', 'email')
             ->join('listings', 'reservations.listing_id', '=', 'listings.id')
             ->join('users', 'reservations.owner_id', '=', 'users.id')
