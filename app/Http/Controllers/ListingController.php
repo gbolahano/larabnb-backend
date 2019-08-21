@@ -66,7 +66,7 @@ class ListingController extends Controller
             'price' => $request->price,
             'status' => $request->status,
             'description' => $request->description,
-            'photos' => 'http://lorempixel.com/300/300?' + rand(8200, 8600)
+            'photos' => 'http://lorempixel.com/300/300?' . random_int(82000, 86000)
         ]);
 
         if ($request->has('amenities')) {
@@ -89,6 +89,7 @@ class ListingController extends Controller
     {
         $listing = Listing::where('id', $id)->first();
         $amenities = $listing->amenities;
+        $user = $listing->user;
         $data = [
             "listing" => $listing,
             "amenities" => $amenities

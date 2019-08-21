@@ -11,7 +11,7 @@ class WelcomeController extends Controller
 {
     public function index()
     {
-    	$listings = Listing::orderBy('created_at', 'desc')->take(4)->get();
+    	$listings = Listing::where('user_id', 1)->orderBy('created_at', 'desc')->get();
 			// return view('welcome')->with('listings', $listings);
 			return response()->json($listings);
     }

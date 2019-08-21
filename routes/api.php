@@ -24,8 +24,7 @@ Route::get('home-listing/{id}/show', 'WelcomeController@show')->name('single.lis
 Route::get('home-listings/all', 'WelcomeController@allListings')->name('home-listings.all');
 Route::post('home-listing/{id}/make-reservation', 'WelcomeController@makeReservation')->name('home-listings.book');
 Route::post('/register', 'UserController@store');
-// 'middleware' => 'auth:api', 
-Route::group(['prefix' => 'user'], function () {
+Route::group(['middleware' => 'auth:api', 'prefix' => 'user'], function () {
     // Route::get('/home', 'UserController@index')->name('user.home');
     Route::get('{id}/home', 'UserController@index')->name('home');
 

@@ -23,7 +23,7 @@ class UserController extends Controller
 
         $reservations = DB::table('reservations')
             ->where('reservations.user_id', $user->id)
-            ->select('users.name as user_name', 'photos', 'date_to', 'date_from', 'listings.name as listing_name', 'description', 'reservations.price as price', 'no_of_guests', 'status', 'email')
+            ->select('users.name as user_name', 'photos', 'date_to', 'date_from', 'listings.name as listing_name', 'description', 'reservations.price as price', 'no_of_guests', 'status', 'email', 'listings.id as listing_id')
             ->join('listings', 'reservations.listing_id', '=', 'listings.id')
             ->join('users', 'reservations.owner_id', '=', 'users.id')
             ->orderBy('reservations.created_at', 'desc')
