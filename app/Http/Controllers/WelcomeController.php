@@ -18,7 +18,7 @@ class WelcomeController extends Controller
 
     public function show($id)
     {
-    	$listing = Listing::find($id);
+    	$listing = Listing::find($id)->with('user')->get();
 
 			// return view('frontend.single-listing')->with('listing', $listing);
 			return response()->json($listing);
