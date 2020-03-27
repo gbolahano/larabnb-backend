@@ -8,6 +8,7 @@ use App\Amenity;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class ListingController extends Controller
 {
@@ -60,6 +61,21 @@ class ListingController extends Controller
             'amenities' => 'required'
         ]);
 
+        /* $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'price' => 'required',
+            'status' => 'required',
+            'description' => 'required',
+            'photos' => 'required',
+            'amenities' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors()
+            ]);
+        } */
+
         $listing = Listing::create([
             'user_id' => $request->user_id,
             'name' => $request->name,
@@ -87,12 +103,11 @@ class ListingController extends Controller
      */
     public function show($id)
     {
-        $listing = Listing::where('id', $id)->first();
-        $amenities = $listing->amenities;
-        $user = $listing->user;
+        $listing = Listing::where('id', $id)->with(['amenities', 'user'])->first();
+        // $amenities = $listing->amenities;
+        // $user = $listing->user;
         $data = [
-            "listing" => $listing,
-            "amenities" => $amenities
+            "listing" => $listing
         ];
         return response()->json($data);
     }

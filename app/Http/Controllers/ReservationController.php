@@ -59,7 +59,7 @@ class ReservationController extends Controller
         $data = [
             "success" => "Reservation created"
         ];
-        
+
         return response()->json($data);
     }
 
