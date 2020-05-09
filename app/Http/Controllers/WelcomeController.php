@@ -18,10 +18,10 @@ class WelcomeController extends Controller
 
     public function show($id)
     {
-    	$listing = Listing::find($id)->with('user')->get();
+    	$listing = Listing::where('id', $id)->with('user')->first();
 
 			// return view('frontend.single-listing')->with('listing', $listing);
-			return response()->json($listing);
+			return response()->json(["listing" => $listing]);
     }
 
     public function allListings()
@@ -31,27 +31,30 @@ class WelcomeController extends Controller
 			return response()->json($listings);
     }
 
-    public function makeReservation(Request $request, $id)
+    public function makeReservation(Request $request, $listing_id)
     {
     	$this->validate($request, [
     		'date_from' => 'required',
     		'date_to' => 'required',
     		'no_of_guests' => 'required'
-    	]);
+			]);
 
-    	$listing = Listing::find($id);
-    	$price = $listing->price * $request->input('no_of_guests');
+    	$listing = Listing::find($listing_id);
+    	$price = $listing->price * $request->no_of_guests;
     	$reservation = Reservation::create([
     		'user_id' => Auth::id(),
     		'listing_id' => $listing->id,
-    		'date_from' => $request->input('date_from'),
-    		'date_to' => $request->input('date_to'),
-    		'no_of_guests' => $request->input('no_of_guests'),
+    		'date_from' => $request->date_from,
+    		'date_to' => $request->date_to,
+    		'no_of_guests' => $request->no_of_guests,
     		'price' => $price,
     		'owner_id' => $listing->user_id
     	]);
 
-    	session()->flash('success', 'Booked successfully');
-    	return redirect()->back();
+    	$data = [
+					"success" => "Reservation created"
+			];
+
+			return response()->json($data);
     }
 }

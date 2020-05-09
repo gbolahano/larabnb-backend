@@ -58,9 +58,10 @@ class ReviewsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($listing_id)
     {
-
+      $reviews = Review::where('listing_id', $listing_id)->with('user')->orderBy('created_at', 'desc')->get();
+      return response()->json(['reviews' => $reviews]);
     }
 
     /**

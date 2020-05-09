@@ -37,7 +37,6 @@ class ReservationController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'user_id' => 'required',
             'listing_id' => 'required',
             'date_from' => 'required',
             'date_to' => 'required',
@@ -47,7 +46,7 @@ class ReservationController extends Controller
         ]);
 
         Reservation::create([
-            'user_id' => $request->user_id,
+            'user_id' => Auth::user()->id,
             'listing_id' => $request->listing_id,
             'date_from' => $request->date_from,
             'date_to' => $request->date_to,
@@ -105,10 +104,11 @@ class ReservationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id, $user_id)
+    public function destroy($id)
     {
-        $reservation = Reservation::find($id)->where('user_id', $user_id)->first();
-        $reservation->delete();
+        Reservation::destroy($id);
+        // $reservation = Reservation::find($id)->where('user_id', $user_id)->first();
+        // $reservation->delete();
 
         $data = [
             "success" => "Reservation deleted"

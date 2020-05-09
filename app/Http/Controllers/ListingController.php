@@ -17,11 +17,11 @@ class ListingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($user_id)
+    public function index()
     {
         // $user = User::find($user_id);
         $data = DB::table('users')
-            ->where('users.id', $user_id)
+            ->where('users.id', Auth::user()->id)
             ->join('listings', 'users.id', '=', 'listings.user_id')
             ->orderBy('listings.created_at', 'desc')
             ->get();
@@ -77,7 +77,7 @@ class ListingController extends Controller
         } */
 
         $listing = Listing::create([
-            'user_id' => $request->user_id,
+            'user_id' => Auth::user()->id,
             'name' => $request->name,
             'price' => $request->price,
             'status' => $request->status,
@@ -132,9 +132,9 @@ class ListingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id, $user_id)
+    public function update(Request $request, $id)
     {
-        $listing = Listing::where('id', $id)->where('user_id', $user_id)->first();
+        $listing = Listing::where('id', $id)->where('user_id', Auth::user()->id)->first();
 
         if ($request->has('name')) {
             $listing->name = $request->name;
@@ -171,10 +171,11 @@ class ListingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id, $user_id)
+    public function destroy($id)
     {
-        $listing = Listing::find($id)->where('user_id', $user_id)->first();
-        $listing->delete();
+        Listing::destroy($id);
+        // $listing = Listing::find($id)->where('user_id', Auth::user()->id)->first();
+        // $listing->forceDelete();
 
         $data = [
             "success" => "Lisiting deleted"

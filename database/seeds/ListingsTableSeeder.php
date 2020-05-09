@@ -11,6 +11,6 @@ class ListingsTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Listing::class, 20)->create();
+        factory(App\Listing::class, 10)->create();
     }
 }

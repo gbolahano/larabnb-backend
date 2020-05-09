@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use App\User;
 use App\Reservation;
+use Auth;
 
 class UserController extends Controller
 {
@@ -15,15 +16,14 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id)
+    public function index()
     {
-        $user = User::find($id);
 
         // $reservations = $user->reservations()->orderBy('created_at', 'desc')->take(5)->get();
 
         $reservations = DB::table('reservations')
-            ->where('reservations.user_id', $user->id)
-            ->select('users.name as user_name', 'photos', 'date_to', 'date_from', 'listings.name as listing_name', 'description', 'reservations.price as price', 'no_of_guests', 'status', 'email', 'listings.id as listing_id')
+            ->where('reservations.user_id', Auth::user()->id)
+            ->select('users.name as user_name', 'photos', 'date_to', 'date_from', 'listings.name as listing_name', 'description', 'reservations.price as price', 'reservations.id as reservation_id', 'no_of_guests', 'status', 'email', 'listings.id as listing_id')
             ->join('listings', 'reservations.listing_id', '=', 'listings.id')
             ->join('users', 'reservations.owner_id', '=', 'users.id')
             ->orderBy('reservations.created_at', 'desc')
@@ -32,8 +32,8 @@ class UserController extends Controller
         // $bookings = Reservation::where('owner_id', $id)->orderBy('created_at', 'desc')->take(5)->get();
 
         $bookings = DB::table('reservations')
-            ->where('reservations.owner_id', $id)
-            ->select('users.name as user_name', 'photos', 'date_to', 'date_from', 'listings.name as listing_name', 'description', 'reservations.price as price', 'no_of_guests', 'status', 'email')
+            ->where('reservations.owner_id', Auth::user()->id)
+            ->select('users.name as user_name', 'photos', 'date_to', 'date_from', 'listings.name as listing_name', 'description', 'reservations.price as price', 'reservations.id as reservation_id', 'no_of_guests', 'status', 'email')
             ->join('listings', 'reservations.listing_id', '=', 'listings.id')
             ->join('users', 'reservations.user_id', '=', 'users.id')
             ->orderBy('reservations.created_at', 'desc')
